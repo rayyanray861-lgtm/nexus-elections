@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Nexus Coding Club — Elections</title>
+    <style>
+      :root {
+        --ink: #171a18;
+        --muted: #66716a;
+        --paper: #f5f7f5;
+        --line: #e3e8e4;
+        --green: #39865b;
+        --dark: #101311;
+        --pale: #eaf3ec;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button,
+      a {
+        cursor: pointer;
+      }
+      .top {
+        height: 74px;
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 max(5vw, 22px);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--ink);
+        text-decoration: none;
+        font-weight: 750;
+      }
+      .brand img {
+        width: 82px;
+        height: 44px;
+        object-fit: contain;
+        background: #080808;
+        border-radius: 5px;
+      }
+      .brand small {
+        display: block;
+        color: #849087;
+        font-size: 9px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin-top: 3px;
+      }
+      .nav {
+        display: flex;
+        gap: 8px;
+      }
+      .nav button {
+        border: 0;
+        background: transparent;
+        padding: 10px 13px;
+        color: #657168;
+        font-size: 12px;
+        border-radius: 8px;
+      }
+      .nav button:hover,
+      .nav button.active {
+        background: var(--pale);
+        color: var(--green);
+        font-weight: 700;
+      }
+      .profile {
+        font-size: 11px;
+        color: #67736a;
+      }
+      .avatar {
+        display: inline-grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--pale);
+        color: var(--green);
+        font-weight: 700;
+        margin-right: 7px;
+        vertical-align: middle;
+      }
+      main {
+        max-width: 1080px;
+        margin: auto;
+        padding: 38px 22px 70px;
+      }
+      .view {
+        display: none;
+      }
+      .view.active {
+        display: block;
+      }
+      .hero {
+        background: var(--dark);
+        border-radius: 22px;
+        color: white;
+        padding: 43px 46px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero:after {
+        content: "";
+        position: absolute;
+        width: 370px;
+        height: 370px;
+        border: 1px solid #b8e2c21b;
+        border-radius: 50%;
+        right: 90px;
+        top: -210px;
+        box-shadow:
+          0 0 0 44px #ffffff08,
+          0 0 0 90px #ffffff05;
+      }
+      .eyebrow {
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #70bd85;
+        font-weight: 750;
+      }
+      .hero h1 {
+        font-size: clamp(34px, 5vw, 51px);
+        line-height: 1.05;
+        letter-spacing: -0.05em;
+        margin: 14px 0 12px;
+      }
+      .hero p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #c6cec8;
+        max-width: 475px;
+        margin: 0;
+      }
+      .hero-cta {
+        z-index: 1;
+        display: flex;
+        gap: 9px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .btn {
+        border: 1px solid #d9e1da;
+        border-radius: 10px;
+        padding: 12px 17px;
+        background: #fff;
+        color: #35453a;
+        font-weight: 700;
+        font-size: 11px;
+      }
+      .btn.green {
+        background: var(--green);
+        border-color: var(--green);
+        color: white;
+      }
+      .hero .btn {
+        border-color: #ffffff30;
+        background: #ffffff10;
+        color: white;
+      }
+      .hero .btn.green {
+        background: #4a9c68;
+        border-color: #4a9c68;
+      }
+      .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        margin: 31px 0 14px;
+      }
+      .section-title h2 {
+        font-size: 20px;
+        margin: 0;
+        letter-spacing: -0.035em;
+      }
+      .section-title p {
+        font-size: 11px;
+        color: #7b867e;
+        margin: 5px 0 0;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .tile {
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        background: white;
+        padding: 18px;
+        cursor: pointer;
+        transition: 0.16s;
+      }
+      .tile:hover {
+        border-color: #9ec7a8;
+        transform: translateY(-2px);
+      }
+      .tile .ico {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: var(--pale);
+        color: var(--green);
+        display: grid;
+        place-items: center;
+        font-weight: 750;
+      }
+      .tile h3 {
+        font-size: 14px;
+        margin: 13px 0 5px;
+      }
+      .tile p {
+        font-size: 10px;
+        color: #78837c;
+        margin: 0;
+        line-height: 1.5;
+      }
+      .tile b {
+        display: block;
+        color: var(--green);
+        font-size: 10px;
+        margin-top: 13px;
+      }
+      .box {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        padding: 27px;
+        max-width: 720px;
+        margin: auto;
+      }
+      .box h1 {
+        font-size: 28px;
+        letter-spacing: -0.04em;
+        margin: 10px 0 7px;
+      }
+      .sub {
+        font-size: 12px;
+        color: #758078;
+        line-height: 1.55;
+        margin: 0 0 22px;
+      }
+      .field {
+        margin: 16px 0;
+      }
+      .field label {
+        display: block;
+        font-weight: 700;
+        font-size: 11px;
+        margin-bottom: 7px;
+      }
+      .field input,
+      .field select {
+        width: 100%;
+        height: 44px;
+        border: 1px solid #dce3dd;
+        border-radius: 9px;
+        padding: 0 12px;
+        background: white;
+        font-size: 12px;
+        color: var(--ink);
+      }
+      .hint {
+        font-size: 10px;
+        color: #849087;
+        margin-top: 6px;
+      }
+      .full {
+        width: 100%;
+        margin-top: 7px;
+      }
+      .ballot-layout {
+        display: grid;
+        grid-template-columns: 1fr 240px;
+        gap: 14px;
+        max-width: 950px;
+        margin: auto;
+        align-items: start;
+      }
+      .ballot-box {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        padding: 25px;
+      }
+      .steps-box {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        padding: 19px;
+        position: sticky;
+        top: 14px;
+      }
+      .steps-box h3 {
+        font-size: 13px;
+        margin: 0 0 12px;
+      }
+      .step {
+        font-size: 10px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        color: #727d75;
+        padding: 6px 0;
+      }
+      .step.current {
+        font-weight: 700;
+        color: #26342a;
+      }
+      .step.done {
+        color: var(--green);
+      }
+      .step i {
+        font-style: normal;
+        width: 16px;
+        height: 16px;
+        border: 1px solid #d6dfd7;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 9px;
+      }
+      .step.done i {
+        background: var(--green);
+        color: white;
+        border-color: var(--green);
+      }
+      .bar {
+        height: 4px;
+        background: #e8eee9;
+        border-radius: 5px;
+        margin: 11px 0 20px;
+        overflow: hidden;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        background: var(--green);
+      }
+      .role-head {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+      .role-icon {
+        height: 36px;
+        width: 36px;
+        border-radius: 10px;
+        background: var(--pale);
+        color: var(--green);
+        display: grid;
+        place-items: center;
+      }
+      .role-head h2 {
+        font-size: 18px;
+        margin: 0 0 3px;
+      }
+      .role-head small {
+        font-size: 10px;
+        color: #7a857d;
+      }
+      .candidate {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        text-align: left;
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        padding: 12px;
+        margin: 8px 0;
+        cursor: pointer;
+      }
+      .candidate.selected {
+        background: #f5fbf6;
+        border-color: #56a16e;
+      }
+      .initial {
+        width: 37px;
+        height: 37px;
+        border-radius: 50%;
+        background: #e7f0e8;
+        color: #39734d;
+        display: grid;
+        place-items: center;
+        font-size: 11px;
+        font-weight: 750;
+      }
+      .ctext {
+        flex: 1;
+      }
+      .ctext b {
+        font-size: 11px;
+      }
+      .ctext small {
+        display: block;
+        color: #7b867f;
+        font-size: 9px;
+        margin-top: 3px;
+      }
+      .radio {
+        width: 16px;
+        height: 16px;
+        border: 1px solid #bdcabe;
+        border-radius: 50%;
+      }
+      .selected .radio {
+        border: 5px solid var(--green);
+      }
+      .ballot-controls {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding-top: 16px;
+        border-top: 1px solid #edf0ed;
+      }
+      .note {
+        font-size: 9px;
+        line-height: 1.5;
+        color: #77827a;
+        background: #f5f7f5;
+        padding: 10px;
+        border-radius: 8px;
+        margin-top: 15px;
+      }
+      .footer {
+        border-top: 1px solid var(--line);
+        padding: 18px max(5vw, 22px);
+        font-size: 10px;
+        color: #929c94;
+        display: flex;
+        justify-content: space-between;
+      }
+      .footer b {
+        color: var(--green);
+      }
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: #10171180;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+      }
+      .overlay.show {
+        display: flex;
+      }
+      .modal {
+        width: min(490px, 100%);
+        max-height: 85vh;
+        overflow: auto;
+        background: white;
+        border-radius: 17px;
+        padding: 24px;
+      }
+      .modal h2 {
+        font-size: 21px;
+        margin: 12px 0 7px;
+      }
+      .modal p {
+        font-size: 11px;
+        line-height: 1.6;
+        color: #758078;
+      }
+      .review {
+        border-top: 1px solid var(--line);
+        margin-top: 14px;
+      }
+      .review div {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        border-bottom: 1px solid var(--line);
+        padding: 9px 0;
+        font-size: 10px;
+      }
+      .review span {
+        color: #758078;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .confirm {
+        text-align: center;
+        padding: 14px;
+      }
+      .confirm i {
+        display: grid;
+        place-items: center;
+        margin: 0 auto 12px;
+        width: 48px;
+        height: 48px;
+        background: var(--pale);
+        color: var(--green);
+        border-radius: 50%;
+        font-style: normal;
+        font-size: 23px;
+      }
+      @media (max-width: 760px) {
+        .top {
+          padding: 0 14px;
+        }
+        .profile {
+          display: none;
+        }
+        .nav {
+          gap: 0;
+        }
+        .nav button {
+          font-size: 10px;
+          padding: 9px 8px;
+        }
+        .hero {
+          padding: 30px 25px;
+          display: block;
+        }
+        .hero-cta {
+          justify-content: flex-start;
+          margin-top: 20px;
+        }
+        .grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .ballot-layout {
+          grid-template-columns: 1fr;
+        }
+        .steps-box {
+          position: static;
+          order: -1;
+        }
+        .steps-box .step-list {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 480px) {
+        main {
+          padding: 22px 13px 45px;
+        }
+        .brand img {
+          width: 61px;
+          height: 36px;
+        }
+        .brand {
+          font-size: 12px;
+          gap: 8px;
+        }
+        .brand small {
+          font-size: 8px;
+        }
+        .nav button {
+          padding: 8px 6px;
+          font-size: 9px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .box,
+        .ballot-box {
+          padding: 20px 15px;
+        }
+        .hero h1 {
+          font-size: 35px;
+        }
+        .footer {
+          padding: 15px;
+          gap: 7px;
+          flex-direction: column;
+        }
+      }
+      .step {
+        border: 0;
+        background: transparent;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .step:hover {
+        color: var(--green);
+      }
+      .results-box {
+        max-width: 900px;
+      }
+      .results-status {
+        background: #fff8e8;
+        color: #79632a;
+        border: 1px solid #f0e4bd;
+        border-radius: 9px;
+        padding: 11px 12px;
+        font-size: 10px;
+        line-height: 1.5;
+        margin: 15px 0;
+      }
+      .result-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .result-card {
+        background: #fbfcfb;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px;
+        text-align: center;
+      }
+      .result-role {
+        font-size: 9px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #718077;
+        font-weight: 700;
+        min-height: 24px;
+      }
+      .winner-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: var(--pale);
+        color: var(--green);
+        font-weight: 750;
+        font-size: 11px;
+        margin: 9px auto;
+      }
+      .result-card h3 {
+        font-size: 11px;
+        margin: 6px 0 3px;
+      }
+      .result-card p {
+        font-size: 9px;
+        color: #7b867e;
+        margin: 0;
+      }
+      .result-count {
+        font-size: 14px;
+        font-weight: 750;
+        color: var(--green);
+        margin-top: 9px;
+      }
+      .result-count span {
+        display: block;
+        font-size: 8px;
+        font-weight: 500;
+        color: #89938b;
+      }
+      .results-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 18px;
+      }
+      @media (max-width: 760px) {
+        .result-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <a class="brand" href="#" data-view="home"
+        ><img src="nexus-icon.jpg" alt="Nexus Coding Club logo" /><span
+          >Nexus Coding Club<small>Community elections</small></span
+        ></a
+      >
+      <nav class="nav">
+        <button class="active" data-view="home">Home</button
+        ><button data-view="register">Candidate registration</button
+        ><button data-view="vote">Voting ballot</button
+        ><button data-view="results">Results</button>
+      </nav>
+    </header>
+    <main>
+      <section class="view active" id="home">
+        <div class="hero">
+          <div>
+            <div class="eyebrow">2026 · MEMBER ELECTIONS</div>
+            <h1>Your club.<br />Your next chapter.</h1>
+            <p>
+              Choose the people who will shape what Nexus builds, learns, and
+              creates together.
+            </p>
+          </div>
+          <div class="hero-cta">
+            <button class="btn" data-view="register">
+              Register as a candidate</button
+            ><button class="btn green" data-view="vote">
+              Open voting ballot
+            </button>
+          </div>
+        </div>
+        <div class="section-title">
+          <div>
+            <h2>Election roles</h2>
+            <p>
+              Five leadership positions, with a lead supporting each manager.
+            </p>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="tile">
+            <div class="ico">✦</div>
+            <h3>President</h3>
+            <p>Lead the club and set its direction.</p>
+          </div>
+          <div class="tile">
+            <div class="ico">↗</div>
+            <h3>Vice President</h3>
+            <p>Coordinate teams and support club leadership.</p>
+          </div>
+          <div class="tile">
+            <div class="ico">⌘</div>
+            <h3>Technical Manager + Lead</h3>
+            <p>Guide projects, technical learning, and the team.</p>
+          </div>
+          <div class="tile">
+            <div class="ico">▦</div>
+            <h3>Workshop Manager + Lead</h3>
+            <p>Plan hands-on workshops and support learners.</p>
+          </div>
+          <div class="tile">
+            <div class="ico">◈</div>
+            <h3>Event Manager + Lead</h3>
+            <p>Bring members together through club events.</p>
+          </div>
+          <div class="tile" data-view="register">
+            <div class="ico">＋</div>
+            <h3>Running for a role?</h3>
+            <p>Register your name and choose a position.</p>
+            <b>Register →</b>
+          </div>
+        </div>
+      </section>
+      <section class="view" id="register">
+        <div class="box">
+          <div class="eyebrow">2026 · MEMBER ELECTIONS</div>
+          <h1>Register as a candidate</h1>
+          <p class="sub">
+            Enter your name and select the position you’d like to run for.
+          </p>
+          <form id="registerForm">
+            <div class="field">
+              <label for="candidateName">Your name</label
+              ><input
+                id="candidateName"
+                required
+                placeholder="Enter your name"
+              />
+            </div>
+            <div class="field">
+              <label for="candidateRole">Position you’re running for</label
+              ><select id="candidateRole" required>
+                <option value="" disabled selected>Select a position</option>
+              </select>
+              <div class="hint">Choose one position.</div>
+            </div>
+            <button class="btn green full">Register as a candidate</button>
+            <p class="sub" id="candidateMessage" role="status"></p>
+          </form>
+        </div>
+      </section>
+      <section class="view" id="vote">
+        <div class="ballot-layout">
+          <div class="ballot-box">
+            <div class="eyebrow">MEMBER ELECTIONS · BALLOT</div>
+            <h1 style="font-size: 26px; margin: 10px 0 5px">
+              Make your choices
+            </h1>
+            <p class="sub">
+              Choose one candidate for each role. Review your selections before
+              submitting.
+            </p>
+            <div class="bar"><i id="bar" style="width: 12.5%"></i></div>
+            <div class="role-head">
+              <div class="role-icon" id="roleIcon">✦</div>
+              <div>
+                <h2 id="roleTitle">President</h2>
+                <small id="roleSub">Club leadership</small>
+              </div>
+            </div>
+            <div id="candidateChoices"></div>
+            <div class="ballot-controls">
+              <button id="back" class="btn">← Back</button
+              ><button id="next" class="btn green">Next role →</button>
+            </div>
+            <div class="note" id="ballotMessage">Open the ballot to get started.</div>
+          </div>
+          <aside class="steps-box">
+            <h3>Your ballot</h3>
+            <div class="step-list" id="stepList"></div>
+            <div class="note">
+              Your vote is private. Review your choices before submitting.
+            </div>
+          </aside>
+        </div>
+      </section>
+      <section class="view" id="results">
+        <div class="box results-box">
+          <div class="eyebrow">2026 · ELECTION RESULTS</div>
+          <h1>Meet your elected team</h1>
+          <p class="sub">
+            Winners for each position will be shown here after voting closes and
+            the results are published.
+          </p>
+          <div class="results-status" id="resultsMessage">Results will appear after the organizer closes voting.</div>
+          <div class="result-grid" id="resultGrid"></div>
+          <div class="note">One submission is allowed per browser session. Using another browser or device can create another ballot.</div>
+          <div class="results-actions"><button class="btn" id="restartElection">Restart Election</button></div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <span>© 2026 Nexus Coding Club · Elections</span
+      ><span>Questions? <b>Contact the election team</b></span>
+    </footer>
+    <div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+    <script>
+      const $ = (selector) => document.querySelector(selector);
+      const icons = { President: "✦", "Vice President": "↗", "Technical Manager": "⌘", "Technical Lead": "⌁", "Workshop Manager": "▦", "Workshop Lead": "⌁", "Event Manager": "◈", "Event Lead": "⌁" };
+      let election = null;
+      let roles = [];
+      let choices = {};
+      let roleIndex = 0;
+      let currentVoter = false;
+      let ballotSubmitted = false;
+
+      async function api(url, options = {}) {
+        const response = await fetch(url, { credentials: "same-origin", cache: "no-store", headers: { "Content-Type": "application/json", ...(options.headers || {}) }, ...options });
+        const responseText = response.status === 204 ? "" : await response.text();
+        let data = {};
+        if (responseText) {
+          try { data = JSON.parse(responseText); }
+          catch { data = { error: responseText }; }
+        }
+        if (!response.ok) throw new Error(data.error || "Request failed.");
+        return data;
+      }
+      function showMessage(selector, message, isError = false) {
+        const element = $(selector);
+        element.textContent = message;
+        element.style.color = isError ? "#b54747" : "var(--green)";
+      }
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+      }
+      async function navigate(id) {
+        document.querySelectorAll(".view").forEach((view) => view.classList.toggle("active", view.id === id));
+        document.querySelectorAll(".nav button").forEach((button) => button.classList.toggle("active", button.dataset.view === id));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (id === "vote") {
+          await restoreBallotSession();
+          await loadElection();
+          renderBallot();
+        }
+        if (id === "register") await loadElection();
+        if (id === "results") loadResults();
+      }
+      document.querySelectorAll("[data-view]").forEach((element) => element.addEventListener("click", () => navigate(element.dataset.view)));
+
+      async function loadElection() {
+        try {
+          const data = await api("/api/election");
+          election = data.election;
+          roles = data.positions;
+          const roleOptions = roles.map((role) => `<option value="${role.position_id}">${escapeHtml(role.name)}</option>`).join("");
+          $("#candidateRole").innerHTML = '<option value="" disabled selected>Select a position</option>' + roleOptions;
+          if (currentVoter) renderBallot();
+        } catch (error) {
+          showMessage("#candidateMessage", error.message, true);
+          showMessage("#ballotMessage", error.message, true);
+        }
+      }
+
+      $("#registerForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        showMessage("#candidateMessage", "Sending registration…");
+        try {
+          const data = await api("/api/candidates", { method: "POST", body: JSON.stringify({ name: $("#candidateName").value.trim(), position_id: Number($("#candidateRole").value) }) });
+          showMessage("#candidateMessage", `${data.candidate.name} is registered for ${roles.find((role) => role.position_id === data.candidate.position_id)?.name}.`);
+          event.target.reset();
+          await loadElection();
+        } catch (error) { showMessage("#candidateMessage", error.message, true); }
+      });
+
+      function renderBallot() {
+        if (!roles.length) {
+          $("#roleTitle").textContent = "No positions are set up";
+          $("#roleSub").textContent = "Ask the organizer to configure the ballot";
+          $("#candidateChoices").innerHTML = '<p class="note">The election has no positions yet. Add positions before voting can begin.</p>';
+          $("#back").disabled = true;
+          $("#next").disabled = true;
+          $("#stepList").innerHTML = "";
+          return;
+        }
+        if (ballotSubmitted) {
+          $("#roleTitle").textContent = "Ballot already submitted";
+          $("#roleSub").textContent = "Thank you for voting";
+          $("#candidateChoices").innerHTML = '<p class="note">This browser has already submitted its ballot.</p>';
+          $("#ballotMessage").textContent = "Your choices have been recorded.";
+          $("#back").disabled = true;
+          $("#next").disabled = true;
+          $("#stepList").innerHTML = "";
+          return;
+        }
+        if (!currentVoter) {
+          $("#roleTitle").textContent = "Preparing your ballot";
+          $("#roleSub").textContent = "Please wait";
+          $("#candidateChoices").innerHTML = '<p class="note">Connecting to the election…</p>';
+          $("#ballotMessage").textContent = "Your ballot is being prepared.";
+          $("#back").disabled = true;
+          $("#next").disabled = true;
+          $("#stepList").innerHTML = "";
+          return;
+        }
+        const role = roles[roleIndex];
+        $("#roleTitle").textContent = role.name;
+        $("#roleSub").textContent = role.reports_to ? `Reports to ${role.reports_to}` : "Nexus Coding Club leadership";
+        $("#roleIcon").textContent = icons[role.name] || "✦";
+        $("#bar").style.width = ((roleIndex + 1) / roles.length) * 100 + "%";
+        $("#candidateChoices").innerHTML = role.candidates.length ? role.candidates.map((candidate, index) => `<button type="button" class="candidate ${String(choices[role.position_id]) === String(candidate.candidate_id) ? "selected" : ""}" data-choice="${candidate.candidate_id}"><span class="initial">${String.fromCharCode(65 + index)}</span><span class="ctext"><b>${escapeHtml(candidate.name)}</b><small>${escapeHtml(candidate.statement || "Candidate for " + role.name)}</small></span><span class="radio"></span></button>`).join("") : '<p class="note">No candidates are registered for this position yet.</p>';
+        document.querySelectorAll(".candidate").forEach((button) => button.addEventListener("click", () => { choices[role.position_id] = Number(button.dataset.choice); renderBallot(); }));
+        $("#stepList").innerHTML = roles.map((item, index) => `<button type="button" class="step ${index === roleIndex ? "current " : ""}${choices[item.position_id] ? "done" : ""}" data-step="${index}"><i>${choices[item.position_id] ? "✓" : ""}</i>${escapeHtml(item.name)}</button>`).join("");
+        document.querySelectorAll(".step").forEach((button) => button.addEventListener("click", () => { roleIndex = Number(button.dataset.step); renderBallot(); }));
+        $("#back").disabled = roleIndex === 0;
+        $("#next").disabled = role.candidates.length === 0;
+        $("#next").textContent = roleIndex === roles.length - 1 ? "Review & submit →" : "Next role →";
+        $("#ballotMessage").textContent = "Your selections are kept private. You can submit one ballot.";
+      }
+      $("#back").onclick = () => { if (roleIndex > 0) { roleIndex--; renderBallot(); } };
+      $("#next").onclick = () => { if (roleIndex < roles.length - 1) { roleIndex++; renderBallot(); } else showReview(); };
+
+      function showReview() {
+        const missing = roles.find((role) => !choices[role.position_id]);
+        if (missing) { roleIndex = roles.indexOf(missing); renderBallot(); showMessage("#ballotMessage", `Please choose a candidate for ${missing.name}.`, true); return; }
+        const rows = roles.map((role) => `<div><span>${escapeHtml(role.name)}</span><b>${escapeHtml(role.candidates.find((candidate) => String(candidate.candidate_id) === String(choices[role.position_id]))?.name || "Candidate")}</b></div>`).join("");
+        $("#modal").innerHTML = `<div class="eyebrow">FINAL REVIEW</div><h2>Review your choices</h2><p>Check your selections before submitting. Your name is not stored alongside your choices.</p><div class="review">${rows}</div><div class="modal-actions"><button class="btn" id="edit">Edit ballot</button><button class="btn green" id="submit">Submit ballot</button></div>`;
+        openModal();
+        $("#edit").onclick = closeModal;
+        $("#submit").onclick = async () => {
+          $("#submit").disabled = true;
+          try {
+            const data = await api("/api/votes", { method: "POST", body: JSON.stringify({ choices: roles.map((role) => ({ position_id: role.position_id, candidate_id: choices[role.position_id] })) }) });
+            $("#modal").innerHTML = `<div class="confirm"><i>✓</i><h2>Ballot submitted</h2><p>${escapeHtml(data.message)}</p><button class="btn green" id="finish">Done</button></div>`;
+            $("#finish").onclick = () => { closeModal(); choices = {}; roleIndex = 0; ballotSubmitted = true; currentVoter = false; renderBallot(); };
+          } catch (error) {
+            $("#modal").innerHTML = `<div class="confirm"><h2>Could not submit ballot</h2><p>${escapeHtml(error.message)}</p><button class="btn" id="closeError">Close</button></div>`;
+            $("#closeError").onclick = closeModal;
+          }
+        };
+      }
+      function openModal() { $("#overlay").classList.add("show"); }
+      function closeModal() { $("#overlay").classList.remove("show"); }
+      $("#overlay").onclick = (event) => { if (event.target === $("#overlay")) closeModal(); };
+
+      async function loadResults() {
+        try {
+          const data = await api("/api/results");
+          $("#resultsMessage").textContent = "OFFICIAL RESULTS · Voting is closed.";
+          $("#resultGrid").innerHTML = roles.map((role) => {
+            const candidates = data.results.filter((row) => Number(row.position_id) === Number(role.position_id));
+            const winner = candidates[0];
+            if (!winner || !winner.candidate_id) return `<article class="result-card"><div class="result-role">${escapeHtml(role.name)}</div><p>No candidates</p></article>`;
+            const tied = candidates.length > 1 && Number(candidates[0].votes) === Number(candidates[1].votes);
+            return `<article class="result-card"><div class="result-role">${escapeHtml(role.name)}</div><div class="winner-avatar">${escapeHtml(winner.candidate.slice(0, 1).toUpperCase())}</div><h3>${escapeHtml(winner.candidate)}</h3><p>${tied ? "Tie · organizer review needed" : "Elected candidate"}</p><div class="result-count">${winner.votes} <span>votes</span></div></article>`;
+          }).join("");
+        } catch (error) {
+          $("#resultsMessage").textContent = error.message;
+          $("#resultGrid").innerHTML = "";
+        }
+      }
+
+      $("#restartElection").addEventListener("click", () => {
+        $("#modal").innerHTML = `<div class="eyebrow">RESTART ELECTION</div><h2>Clear votes and restart?</h2><p>This permanently clears current votes, submissions, ballot sessions, and candidate names. The available positions will be preserved so you can register new candidates from the UI.</p><div class="field"><label for="organizerPassword">Organizer password</label><input id="organizerPassword" type="password" autocomplete="current-password" required></div><div class="modal-actions"><button class="btn" id="cancelRestart">Cancel</button><button class="btn green" id="confirmRestart">Clear and restart</button></div><p class="sub" id="restartMessage" role="status"></p>`;
+        openModal();
+        $("#cancelRestart").onclick = closeModal;
+        $("#confirmRestart").onclick = async () => {
+          const button = $("#confirmRestart");
+          const password = $("#organizerPassword").value;
+          if (!password) { $("#organizerPassword").focus(); return; }
+          button.disabled = true;
+          showMessage("#restartMessage", "Restarting election…");
+          try {
+            await api("/api/admin/login", { method: "POST", body: JSON.stringify({ password }) });
+            const data = await api("/api/admin/reset-election", { method: "POST", body: "{}" });
+            const refreshedElection = await api("/api/election");
+            const remainingCandidates = refreshedElection.positions.reduce((total, position) => total + position.candidates.length, 0);
+            if (remainingCandidates) {
+              throw new Error(`The reset request returned, but ${remainingCandidates} candidate(s) are still in the database. Restart the election server, then try again.`);
+            }
+            closeModal();
+            choices = {};
+            roleIndex = 0;
+            ballotSubmitted = false;
+            currentVoter = false;
+            await navigate("register");
+            showMessage("#candidateMessage", data.message);
+          } catch (error) {
+            showMessage("#restartMessage", error.message, true);
+            button.disabled = false;
+          }
+        };
+        $("#organizerPassword").focus();
+      });
+
+      async function restoreBallotSession() {
+        try {
+          const data = await api("/api/ballot-access");
+          ballotSubmitted = data.submitted;
+          currentVoter = data.active;
+        } catch (error) { currentVoter = false; showMessage("#ballotMessage", error.message, true); }
+      }
+      (async () => { await restoreBallotSession(); await loadElection(); renderBallot(); })();
+    </script>
+  </body>
+</html>

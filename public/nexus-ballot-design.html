@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Nexus Coding Club — Ballot Design</title>
+    <style>
+      :root {
+        --ink: #171a18;
+        --muted: #66716a;
+        --paper: #f5f7f5;
+        --line: #e3e8e4;
+        --green: #39865b;
+        --green-dark: #246340;
+        --pale: #eaf3ec;
+        --black: #101311;
+        --white: #fff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+      .topbar {
+        height: 76px;
+        background: white;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 max(5vw, 24px);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 750;
+        letter-spacing: -0.03em;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .brand img {
+        width: 86px;
+        height: 45px;
+        object-fit: contain;
+        border-radius: 6px;
+        background: #080808;
+      }
+      .brand small {
+        display: block;
+        color: #8791a5;
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-top: 2px;
+      }
+      .nav {
+        font-size: 12px;
+        color: #67736a;
+      }
+      .member {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 12px;
+        font-weight: 650;
+      }
+      .avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #e7f2e9;
+        color: #34734b;
+        font-weight: 750;
+      }
+      main {
+        max-width: 1040px;
+        margin: auto;
+        padding: 34px 24px 70px;
+      }
+      .crumb {
+        font-size: 11px;
+        color: #8b958e;
+        margin-bottom: 24px;
+      }
+      .crumb b {
+        color: var(--green);
+        font-weight: 650;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 275px;
+        gap: 22px;
+        align-items: start;
+      }
+      .main-card,
+      .side-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+      }
+      .main-card {
+        padding: 30px;
+      }
+      .side-card {
+        padding: 22px;
+        position: sticky;
+        top: 18px;
+      }
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        font-size: 10px;
+        font-weight: 750;
+        color: var(--green);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .live-dot {
+        width: 7px;
+        height: 7px;
+        background: #5ab477;
+        border-radius: 100%;
+      }
+      h1 {
+        margin: 12px 0 7px;
+        font-size: 32px;
+        letter-spacing: -0.05em;
+      }
+      .intro {
+        font-size: 13px;
+        color: #748078;
+        margin: 0 0 25px;
+      }
+      .progress-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 11px;
+        color: #657169;
+        margin-bottom: 9px;
+      }
+      .progress-head b {
+        color: #2e7549;
+      }
+      .progress {
+        height: 5px;
+        background: #e9eee9;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 24px;
+      }
+      .progress i {
+        display: block;
+        height: 100%;
+        background: var(--green);
+        border-radius: 8px;
+        transition: width 0.2s;
+      }
+      .role-heading {
+        display: flex;
+        align-items: flex-start;
+        gap: 13px;
+        margin-bottom: 17px;
+      }
+      .role-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--pale);
+        color: var(--green);
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-weight: 750;
+        font-size: 18px;
+      }
+      .role-heading h2 {
+        font-size: 20px;
+        letter-spacing: -0.035em;
+        margin: 0 0 4px;
+      }
+      .role-heading p {
+        font-size: 11px;
+        color: #79847d;
+        margin: 0;
+      }
+      .req {
+        font-size: 10px;
+        color: #858f88;
+        margin: 20px 0 10px;
+      }
+      .candidates {
+        display: grid;
+        gap: 10px;
+      }
+      .candidate {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: white;
+        padding: 14px;
+        display: grid;
+        grid-template-columns: 42px 1fr 20px;
+        gap: 12px;
+        align-items: center;
+        text-align: left;
+        transition: 0.15s;
+      }
+      .candidate:hover {
+        border-color: #a7cbb0;
+        background: #fcfefc;
+      }
+      .candidate.selected {
+        border-color: #4a9b68;
+        background: #f5fbf6;
+        box-shadow: 0 0 0 2px #39865b12;
+      }
+      .photo {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #e6efe8;
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+        font-weight: 750;
+        color: #377a4f;
+      }
+      .candidate:nth-child(2) .photo {
+        background: #edf0e4;
+        color: #6e8041;
+      }
+      .candidate:nth-child(3) .photo {
+        background: #e8edf0;
+        color: #4e7180;
+      }
+      .cname {
+        font-weight: 700;
+        font-size: 13px;
+      }
+      .tag {
+        color: #88928b;
+        font-size: 10px;
+        margin-top: 3px;
+      }
+      .bio {
+        font-size: 10px;
+        line-height: 1.5;
+        color: #707b73;
+        margin-top: 8px;
+      }
+      .radio {
+        width: 18px;
+        height: 18px;
+        border: 1.5px solid #cbd4cd;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+      }
+      .selected .radio {
+        border-color: var(--green);
+      }
+      .selected .radio:after {
+        content: "";
+        width: 9px;
+        height: 9px;
+        background: var(--green);
+        border-radius: 50%;
+      }
+      .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 24px;
+        padding-top: 19px;
+        border-top: 1px solid #edf0ed;
+      }
+      .btn {
+        border: 1px solid #dce3dd;
+        border-radius: 10px;
+        background: #fff;
+        color: #526057;
+        padding: 11px 17px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .btn.primary {
+        background: var(--green);
+        border-color: var(--green);
+        color: #fff;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+      .btn.primary:hover {
+        background: var(--green-dark);
+      }
+      .side-card h3 {
+        font-size: 14px;
+        margin: 0 0 16px;
+      }
+      .checklist {
+        display: grid;
+        gap: 12px;
+      }
+      .role-item {
+        font-size: 11px;
+        color: #667169;
+        display: flex;
+        gap: 9px;
+        align-items: center;
+      }
+      .check {
+        width: 17px;
+        height: 17px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        border: 1px solid #d5ded7;
+        color: white;
+        font-size: 10px;
+        flex: none;
+      }
+      .role-item.done .check {
+        background: var(--green);
+        border-color: var(--green);
+      }
+      .role-item.current {
+        font-weight: 700;
+        color: #26352b;
+      }
+      .side-divider {
+        border: 0;
+        border-top: 1px solid #edf0ed;
+        margin: 19px 0 14px;
+      }
+      .privacy {
+        font-size: 10px;
+        color: #7d8880;
+        line-height: 1.6;
+      }
+      .lock {
+        color: var(--green);
+        font-size: 13px;
+        margin-right: 5px;
+      }
+      .sample {
+        background: #f5f7f5;
+        color: #78837a;
+        border-radius: 8px;
+        padding: 10px 11px;
+        font-size: 9px;
+        line-height: 1.5;
+        margin-top: 16px;
+      }
+      .footer {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 24px 25px;
+        display: flex;
+        justify-content: space-between;
+        color: #98a198;
+        font-size: 10px;
+      }
+      .footer b {
+        color: var(--green);
+      }
+      .overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: #10171180;
+        z-index: 4;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .overlay.show {
+        display: flex;
+      }
+      .modal {
+        width: min(520px, 100%);
+        max-height: 85vh;
+        overflow: auto;
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 24px 80px #10181144;
+      }
+      .modal-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .modal h2 {
+        margin: 13px 0 6px;
+        letter-spacing: -0.04em;
+      }
+      .modal p {
+        font-size: 12px;
+        line-height: 1.6;
+        color: #758078;
+      }
+      .close {
+        border: 0;
+        background: #f0f3f0;
+        border-radius: 50%;
+        width: 31px;
+        height: 31px;
+        font-size: 18px;
+        color: #66736a;
+      }
+      .review-list {
+        margin: 17px 0;
+        border-top: 1px solid var(--line);
+      }
+      .review-row {
+        padding: 11px 0;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 11px;
+      }
+      .review-row span {
+        color: #78847b;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 9px;
+        margin-top: 19px;
+      }
+      .done-view {
+        text-align: center;
+        padding: 20px 4px 8px;
+      }
+      .done-mark {
+        width: 54px;
+        height: 54px;
+        background: #e9f6ec;
+        color: #39865b;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        margin: 0 auto;
+        font-size: 25px;
+      }
+      .done-view h2 {
+        margin-top: 16px;
+      }
+      .toast {
+        position: fixed;
+        bottom: 18px;
+        left: 50%;
+        transform: translate(-50%, 18px);
+        opacity: 0;
+        transition: 0.2s;
+        background: #18211b;
+        color: white;
+        padding: 11px 16px;
+        border-radius: 10px;
+        font-size: 11px;
+        z-index: 5;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+      @media (max-width: 800px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .side-card {
+          position: static;
+          order: -1;
+        }
+        .side-card .checklist {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .side-card h3 {
+          margin-bottom: 12px;
+        }
+        .privacy,
+        .side-divider {
+          display: none;
+        }
+      }
+      @media (max-width: 760px) {
+        .nav {
+          gap: 12px;
+          font-size: 10px;
+        }
+      }
+      @media (max-width: 520px) {
+        .topbar {
+          height: 66px;
+          padding: 0 15px;
+        }
+        .brand img {
+          width: 74px;
+          height: 40px;
+        }
+        .brand {
+          font-size: 13px;
+        }
+        .nav {
+          display: none;
+        }
+        .member span:last-child {
+          display: none;
+        }
+        main {
+          padding: 23px 14px 55px;
+        }
+        .main-card {
+          padding: 21px 16px;
+        }
+        .side-card {
+          padding: 17px;
+        }
+        .side-card .checklist {
+          grid-template-columns: 1fr 1fr;
+        }
+        h1 {
+          font-size: 27px;
+        }
+        .footer {
+          padding: 0 15px 20px;
+          gap: 8px;
+          flex-direction: column;
+        }
+        .candidate {
+          padding: 12px;
+          grid-template-columns: 38px 1fr 18px;
+        }
+        .photo {
+          width: 38px;
+          height: 38px;
+        }
+        .controls .btn {
+          padding: 10px 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/"
+        ><img src="nexus-icon.jpg" alt="Nexus Coding Club logo" /><span
+          >Nexus Coding Club<small>Community elections</small></span
+        ></a
+      >
+      <nav class="nav">
+        <a href="/">Home</a
+        ><a href="/">Register as candidate</a
+        ><a href="/ballot">Voting ballot</a>
+      </nav>
+      <div class="member">
+        <span class="avatar">AR</span><span>Member portal</span>
+      </div>
+    </header>
+    <main>
+      <div class="crumb">
+        Home&nbsp; / &nbsp;Club elections&nbsp; / &nbsp;<b>Official ballot</b>
+      </div>
+      <div class="layout">
+        <section class="main-card">
+          <div class="eyebrow">
+            <span class="live-dot"></span> MEMBER ELECTIONS · BALLOT
+          </div>
+          <h1>Make your choices</h1>
+          <p class="intro">
+            Select one candidate for each role. You can review everything before
+            you submit.
+          </p>
+          <div class="progress-head">
+            <span id="progressLabel">Role 1 of 8</span
+            ><b id="progressPct">13% complete</b>
+          </div>
+          <div class="progress">
+            <i id="progressBar" style="width: 12.5%"></i>
+          </div>
+          <div class="role-heading">
+            <div class="role-icon" id="roleIcon">✦</div>
+            <div>
+              <h2 id="roleTitle">President</h2>
+              <p id="roleSub">Club leadership</p>
+            </div>
+          </div>
+          <div class="req">Choose one candidate</div>
+          <div class="candidates" id="candidateList"></div>
+          <div class="controls">
+            <button class="btn" id="backBtn">← Back</button
+            ><button class="btn primary" id="nextBtn">Next role →</button>
+          </div>
+        </section>
+        <aside class="side-card">
+          <h3>Your ballot</h3>
+          <div class="checklist" id="checklist"></div>
+          <hr class="side-divider" />
+          <div class="privacy">
+            <span class="lock">▣</span>Your choices are private. Review them
+            before submitting your ballot.
+          </div>
+          <div class="sample">
+            Votes are saved securely when you submit this ballot. You can vote
+            once from this browser for the current election.
+          </div>
+        </aside>
+      </div>
+    </main>
+    <footer class="footer">
+      <span>© 2026 Nexus Coding Club</span
+      ><span>Questions? <b>Contact the election team</b></span>
+    </footer>
+    <div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+    <div class="toast" id="toast"></div>
+    <script>
+      let roles = [];
+      let index = 0;
+      let votes = [];
+      const $ = (s) => document.querySelector(s);
+      function render() {
+        const role = roles[index];
+        $("#roleTitle").textContent = role.name;
+        $("#roleSub").textContent = role.sub;
+        $("#roleIcon").textContent = role.icon;
+        $("#progressLabel").textContent =
+          "Role " + (index + 1) + " of " + roles.length;
+        const pct = Math.round(((index + 1) / roles.length) * 100);
+        $("#progressPct").textContent = pct + "% through ballot";
+        $("#progressBar").style.width =
+          ((index + 1) / roles.length) * 100 + "%";
+        $("#candidateList").innerHTML = role.candidates
+          .map((c, i) => '<button class="candidate ' + (votes[index] === c.candidate_id ? "selected" : "") +
+            '" data-id="' + c.candidate_id + '"><span class="photo">' + String.fromCharCode(65 + i) +
+            '</span><span><span class="cname">' + escapeHtml(c.name) +
+            '</span><span class="tag">Candidate</span><span class="bio">' +
+            escapeHtml(c.statement || "") + '</span></span><span class="radio"></span></button>')
+          .join("");
+        document.querySelectorAll(".candidate").forEach(
+          (b) =>
+            (b.onclick = () => {
+              votes[index] = Number(b.dataset.id);
+              render();
+            }),
+        );
+        $("#backBtn").disabled = index === 0;
+        $("#nextBtn").textContent =
+          index === roles.length - 1 ? "Review ballot →" : "Next role →";
+        $("#checklist").innerHTML = roles
+          .map(
+            (r, i) =>
+              '<div class="role-item ' +
+              (votes[i] !== null ? "done " : "") +
+              (i === index ? "current" : "") +
+              '"><span class="check">' +
+              (votes[i] !== null ? "✓" : "") +
+              "</span><span>" +
+              escapeHtml(r.name) +
+              "</span></div>",
+          )
+          .join("");
+      }
+
+      $("#backBtn").onclick = () => {
+        if (index > 0) {
+          index--;
+          render();
+        }
+      };
+      $("#nextBtn").onclick = () => {
+        if (votes[index] === null) {
+          toast("Choose one candidate to continue.");
+          return;
+        }
+        if (index < roles.length - 1) {
+          index++;
+          render();
+        } else showReview();
+      };
+      function toast(msg) {
+        $("#toast").textContent = msg;
+        $("#toast").classList.add("show");
+        setTimeout(() => $("#toast").classList.remove("show"), 2100);
+      }
+      function showReview() {
+        const summary = roles
+          .map(
+            (r, i) =>
+              '<div class="review-row"><span>' +
+              escapeHtml(r.name) +
+              "</span><b>" +
+              escapeHtml(r.candidates.find((c) => c.candidate_id === votes[i]).name) +
+              "</b></div>",
+          )
+          .join("");
+        $("#modal").innerHTML =
+          '<div class="modal-head"><span class="eyebrow">FINAL REVIEW</span><button class="close" aria-label="Close">×</button></div><h2>Review your choices</h2><p>Check each selection carefully. In a real election, you may not be able to change your ballot after submission.</p><div class="review-list">' +
+          summary +
+          '</div><div class="modal-actions"><button class="btn" id="editBtn">Edit ballot</button><button class="btn primary" id="submitBtn">Submit ballot</button></div>';
+        openModal();
+        $(".close").onclick = closeModal;
+        $("#editBtn").onclick = () => {
+          closeModal();
+          index = 0;
+          render();
+        };
+        $("#submitBtn").onclick = submitBallot;
+      }
+      function openModal() {
+        $("#overlay").classList.add("show");
+      }
+      function closeModal() {
+        $("#overlay").classList.remove("show");
+      }
+      function showDone(message) {
+        $("#modal").innerHTML = '<div class="done-view"><div class="done-mark">&#10003;</div><h2>Ballot submitted</h2><p>' +
+          escapeHtml(message) + '</p><button class="btn primary" id="finishBtn">Done</button></div>';
+        $("#finishBtn").onclick = () => { closeModal(); index = 0; render(); };
+      }
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (ch) => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"})[ch]);
+      }
+      async function api(url, options = {}) {
+        const response = await fetch(url, { credentials: "same-origin", cache: "no-store", headers: { "Content-Type": "application/json" }, ...options });
+        const data = response.status === 204 ? {} : await response.json();
+        if (!response.ok) throw new Error(data.error || "Request failed.");
+        return data;
+      }
+      async function submitBallot() {
+        const button = $("#submitBtn"); button.disabled = true;
+        try {
+          const data = await api("/api/votes", { method: "POST", body: JSON.stringify({ choices: roles.map((r, i) => ({ position_id: r.position_id, candidate_id: votes[i] })) }) });
+          showDone(data.message);
+        } catch (error) {
+          $("#modal").innerHTML = '<div class="done-view"><h2>Could not submit ballot</h2><p>' + escapeHtml(error.message) + '</p><button class="btn primary" id="retryBtn">Close</button></div>';
+          $("#retryBtn").onclick = closeModal;
+        }
+      }
+      async function start() {
+        try {
+          const access = await api("/api/ballot-access");
+          if (access.submitted) {
+            $("#roleTitle").textContent = "Ballot already submitted";
+            $("#roleSub").textContent = "This browser has already submitted a ballot.";
+            $("#candidateList").innerHTML = "";
+            $("#nextBtn").disabled = true;
+            return;
+          }
+          const data = await api("/api/election");
+          roles = data.positions.map((p) => ({
+            position_id: Number(p.position_id), name: p.name,
+            sub: p.reports_to ? "Reports to " + p.reports_to : "Election ballot",
+            icon: "?",
+            candidates: p.candidates.map((c) => ({ candidate_id: Number(c.candidate_id), name: c.name, statement: c.statement }))
+          }));
+          votes = Array(roles.length).fill(null);
+          if (!roles.length || roles.some((r) => !r.candidates.length)) throw new Error("The ballot is not ready yet. Please contact the organizer.");
+          render();
+        } catch (error) {
+          try {
+            const closed = await api("/api/results");
+            $("#roleTitle").textContent = "Final results";
+            $("#roleSub").textContent = "Voting is closed.";
+            const grouped = new Map();
+            closed.results.forEach((row) => {
+              if (!grouped.has(row.position)) grouped.set(row.position, []);
+              grouped.get(row.position).push(row);
+            });
+            $("#candidateList").innerHTML = Array.from(grouped, ([position, rows]) => {
+              const highest = Math.max(...rows.map((row) => Number(row.votes)));
+              const leaders = rows.filter((row) => Number(row.votes) === highest);
+              return '<div class="req">' + escapeHtml(position) + '</div>' + rows.map((row) => {
+                const lead = Number(row.votes) === highest;
+                const outcome = leaders.length > 1 ? (lead ? "Tied for lead" : "Final result") : (lead ? "Winner" : "Final result");
+                return '<div class="candidate"><span class="photo">' + escapeHtml(String(row.votes)) +
+                  '</span><span><span class="cname">' + escapeHtml(row.candidate || "No candidates") +
+                  '</span><span class="tag">' + outcome + '</span><span class="bio">' +
+                  escapeHtml(String(row.votes) + (Number(row.votes) === 1 ? " vote" : " votes")) +
+                  '</span></span></div>';
+              }).join("");
+            }).join("");
+            $("#nextBtn").disabled = true;
+            $("#backBtn").disabled = true;
+            $("#checklist").innerHTML = "";
+            return;
+          } catch (_) {}
+          $("#roleTitle").textContent = "Voting unavailable";
+          $("#roleSub").textContent = error.message;
+          $("#candidateList").innerHTML = "";
+          $("#nextBtn").disabled = true;
+        }
+      }
+      $("#overlay").onclick = (e) => {
+        if (e.target === $("#overlay")) closeModal();
+      };
+      start();
+    </script>
+  </body>
+</html>

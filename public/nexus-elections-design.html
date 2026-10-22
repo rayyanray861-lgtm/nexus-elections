@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nexus Coding Club — Elections</title>
+    <style>
+      :root {
+        --ink: #171a18;
+        --muted: #66716a;
+        --paper: #f5f7f5;
+        --line: #e3e8e4;
+        --blue: #39865b;
+        --violet: #6b8e74;
+        --mint: #6fc28a;
+        --navy: #101311;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .shell {
+        min-height: 100vh;
+      }
+      .topbar {
+        height: 76px;
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 max(5vw, 24px);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 750;
+        letter-spacing: -0.03em;
+      }
+      .mark {
+        width: 86px;
+        height: 45px;
+        object-fit: contain;
+        border-radius: 6px;
+        background: #080808;
+      }
+      .brand small {
+        display: block;
+        color: #8791a5;
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-top: 2px;
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        font-size: 13px;
+        color: #67738a;
+      }
+      .nav a:first-child {
+        color: var(--ink);
+        font-weight: 650;
+      }
+      .member {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 12px;
+        font-weight: 650;
+      }
+      .avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #e7f2e9;
+        color: #34734b;
+        font-weight: 750;
+      }
+      .wrap {
+        max-width: 1180px;
+        margin: auto;
+        padding: 43px 24px 80px;
+      }
+      .crumb {
+        color: #8b95a8;
+        font-size: 12px;
+        margin-bottom: 25px;
+      }
+      .crumb b {
+        color: #39865b;
+        font-weight: 650;
+      }
+      .hero {
+        background: var(--navy);
+        color: #fff;
+        border-radius: 24px;
+        padding: 46px 50px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: space-between;
+        min-height: 244px;
+      }
+      .hero:after {
+        content: "";
+        position: absolute;
+        width: 420px;
+        height: 420px;
+        border: 1px solid #9bd1a519;
+        border-radius: 50%;
+        right: 110px;
+        top: -220px;
+        box-shadow:
+          0 0 0 45px #ffffff08,
+          0 0 0 90px #ffffff06;
+      }
+      .eyebrow {
+        font-size: 10px;
+        letter-spacing: 0.17em;
+        text-transform: uppercase;
+        color: #b7c1ff;
+        font-weight: 750;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .dot {
+        width: 7px;
+        height: 7px;
+        background: var(--mint);
+        border-radius: 50%;
+        box-shadow: 0 0 12px #9cffbd;
+      }
+      .hero h1 {
+        font-size: clamp(34px, 5vw, 52px);
+        letter-spacing: -0.055em;
+        line-height: 1.06;
+        margin: 15px 0 12px;
+      }
+      .hero p {
+        color: #c2cad8;
+        font-size: 14px;
+        margin: 0;
+        max-width: 480px;
+        line-height: 1.65;
+      }
+      .hero-right {
+        z-index: 1;
+        align-self: center;
+        text-align: right;
+        padding-right: 10px;
+      }
+      .count-label {
+        font-size: 11px;
+        color: #aab5cc;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .count {
+        font-size: 38px;
+        font-weight: 750;
+        letter-spacing: -0.05em;
+        margin-top: 5px;
+      }
+      .count span {
+        font-size: 15px;
+        color: #adb8ce;
+        font-weight: 500;
+        letter-spacing: 0;
+      }
+      .progress {
+        width: 185px;
+        height: 5px;
+        border-radius: 9px;
+        background: #ffffff22;
+        margin-top: 14px;
+        overflow: hidden;
+      }
+      .progress i {
+        display: block;
+        height: 100%;
+        width: 28%;
+        background: var(--mint);
+        border-radius: 9px;
+      }
+      .date {
+        font-size: 11px;
+        color: #b9c3d4;
+        margin-top: 9px;
+      }
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        margin: 37px 0 17px;
+      }
+      .section-head h2 {
+        font-size: 21px;
+        margin: 0;
+        letter-spacing: -0.035em;
+      }
+      .section-head p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .steps {
+        display: flex;
+        gap: 7px;
+        color: #8691a5;
+        font-size: 11px;
+      }
+      .steps b {
+        color: #4e5fe8;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        padding: 20px;
+        transition: 0.2s;
+        cursor: pointer;
+        position: relative;
+        min-height: 176px;
+      }
+      .card:hover {
+        border-color: #a7cbb0;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px #17244c0a;
+      }
+      .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .icon {
+        width: 37px;
+        height: 37px;
+        border-radius: 12px;
+        background: #eaf3ec;
+        color: #39865b;
+        display: grid;
+        place-items: center;
+        font-size: 17px;
+        font-weight: 700;
+      }
+      .badge {
+        border-radius: 20px;
+        background: #f2f4f8;
+        color: #778298;
+        font-size: 9px;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        padding: 6px 9px;
+        font-weight: 700;
+      }
+      .badge.open {
+        background: #e8fff0;
+        color: #328455;
+      }
+      .card h3 {
+        margin: 16px 0 5px;
+        font-size: 16px;
+        letter-spacing: -0.025em;
+      }
+      .card p {
+        font-size: 11px;
+        color: #7a8598;
+        margin: 0;
+      }
+      .card-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 19px;
+        padding-top: 13px;
+        border-top: 1px solid #f0f2f6;
+        color: #778298;
+        font-size: 10px;
+      }
+      .card-bottom b {
+        color: #39865b;
+        font-size: 11px;
+      }
+      .lead-card {
+        background: #fbfcff;
+      }
+      .lead-card .icon {
+        background: #edf3ee;
+        color: #568266;
+      }
+      .lead-card h3 {
+        font-size: 14px;
+      }
+      .lead-card .badge {
+        background: #edf3ee;
+        color: #568266;
+      }
+      .note {
+        margin-top: 20px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px 17px;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        font-size: 11px;
+        color: #707c92;
+        line-height: 1.55;
+      }
+      .note-icon {
+        color: #39865b;
+        font-size: 16px;
+      }
+      .footer {
+        margin-top: 45px;
+        border-top: 1px solid var(--line);
+        padding-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        color: #98a1b1;
+        font-size: 10px;
+      }
+      .footer b {
+        color: #39865b;
+      }
+      .overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: #0c152b77;
+        z-index: 4;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .overlay.show {
+        display: flex;
+      }
+      .modal {
+        max-width: 450px;
+        width: 100%;
+        background: #fff;
+        border-radius: 20px;
+        padding: 26px;
+        box-shadow: 0 25px 80px #08132f40;
+      }
+      .modal-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .close {
+        border: 0;
+        background: #f0f2f7;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+        color: #667;
+        cursor: pointer;
+      }
+      .modal h2 {
+        margin: 20px 0 6px;
+        letter-spacing: -0.04em;
+      }
+      .modal p {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #738096;
+      }
+      .modal .primary {
+        width: 100%;
+        background: var(--blue);
+        color: white;
+        border: 0;
+        border-radius: 11px;
+        padding: 13px;
+        font-weight: 700;
+        margin-top: 10px;
+        cursor: pointer;
+      }
+      .toast {
+        position: fixed;
+        bottom: 22px;
+        left: 50%;
+        transform: translate(-50%, 20px);
+        opacity: 0;
+        transition: 0.25s;
+        background: #171c18;
+        color: #fff;
+        padding: 12px 18px;
+        border-radius: 11px;
+        font-size: 12px;
+        z-index: 5;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+      @media (max-width: 760px) {
+        .nav {
+          display: none;
+        }
+        .hero {
+          padding: 32px 26px;
+          min-height: unset;
+        }
+        .hero-right {
+          display: none;
+        }
+        .grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .wrap {
+          padding-top: 28px;
+        }
+        .section-head {
+          align-items: start;
+          gap: 15px;
+          flex-direction: column;
+        }
+        .steps {
+          font-size: 10px;
+        }
+        .footer {
+          gap: 12px;
+          flex-direction: column;
+        }
+      }
+      @media (max-width: 480px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .card {
+          min-height: 155px;
+        }
+        .hero h1 {
+          font-size: 36px;
+        }
+        .topbar {
+          padding: 0 18px;
+        }
+        .wrap {
+          padding-left: 17px;
+          padding-right: 17px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="#"
+          ><img
+            class="mark"
+            src="nexus-icon.jpg"
+            alt="Nexus Coding Club logo"
+          /><span>Nexus Coding Club<small>Community elections</small></span></a
+        >
+        <nav class="nav">
+          <a href="#positions">Positions</a
+          ><a href="nexus-candidate-registration-design.html"
+            >Register as candidate</a
+          ><a href="nexus-ballot-design.html">Voting ballot</a
+          ><a href="#about">About the club</a>
+        </nav>
+        <div class="member">
+          <span class="avatar">AR</span><span>Member portal</span>
+        </div>
+      </header>
+      <main class="wrap">
+        <div class="crumb">Home&nbsp; / &nbsp;<b>Club elections</b></div>
+        <section class="hero">
+          <div>
+            <div class="eyebrow">
+              <span class="dot"></span> 2026 · MEMBER ELECTIONS
+            </div>
+            <h1>Your club.<br />Your next chapter.</h1>
+            <p>
+              Choose the people who will shape what Nexus builds, learns, and
+              creates together.
+            </p>
+          </div>
+          <div class="hero-right">
+            <div class="count-label">Your ballot progress</div>
+            <div class="count">0 <span>of 8 roles</span></div>
+            <div class="progress"><i></i></div>
+            <div class="date">Voting closes · Date to be announced</div>
+          </div>
+        </section>
+        <section id="positions">
+          <div class="section-head">
+            <div>
+              <h2>Explore the positions</h2>
+              <p>Meet the candidates and learn what each role does.</p>
+            </div>
+            <div class="steps">
+              <span><b>01</b> Choose roles</span><span>→</span
+              ><span>02 Review ballot</span><span>→</span><span>03 Submit</span>
+            </div>
+          </div>
+          <div class="grid">
+            <div
+              class="card"
+              data-title="President"
+              data-desc="Leads the club, sets its direction, and represents Nexus across the community."
+            >
+              <div class="card-top">
+                <span class="icon">✦</span
+                ><span class="badge open">Election role</span>
+              </div>
+              <h3>President</h3>
+              <p>Set the direction for Nexus.</p>
+              <div class="card-bottom">
+                <span>Club leadership</span><b>View role →</b>
+              </div>
+            </div>
+            <div
+              class="card"
+              data-title="Vice President"
+              data-desc="Supports the President and helps coordinate the club’s teams, plans, and priorities."
+            >
+              <div class="card-top">
+                <span class="icon">↗</span
+                ><span class="badge open">Election role</span>
+              </div>
+              <h3>Vice President</h3>
+              <p>Keep teams moving together.</p>
+              <div class="card-bottom">
+                <span>Club leadership</span><b>View role →</b>
+              </div>
+            </div>
+            <div
+              class="card"
+              data-title="Technical Manager"
+              data-desc="Guides the club’s technical projects and learning activities, supported by a Technical Lead."
+            >
+              <div class="card-top">
+                <span class="icon">⌘</span
+                ><span class="badge open">Manager + lead</span>
+              </div>
+              <h3>Technical Manager</h3>
+              <p>Build projects and grow skills.</p>
+              <div class="card-bottom">
+                <span>1 manager · 1 lead</span><b>View roles →</b>
+              </div>
+            </div>
+            <div
+              class="card lead-card"
+              data-title="Technical Lead"
+              data-desc="Works with the Technical Manager to support members, coordinate technical work, and help projects move forward."
+            >
+              <div class="card-top">
+                <span class="icon">⌁</span><span class="badge">Lead role</span>
+              </div>
+              <h3>Technical Lead</h3>
+              <p>Support the technical team.</p>
+              <div class="card-bottom">
+                <span>Reports to Technical Manager</span><b>View role →</b>
+              </div>
+            </div>
+            <div
+              class="card"
+              data-title="Workshop Manager"
+              data-desc="Plans practical workshops for the club, supported by a Workshop Lead."
+            >
+              <div class="card-top">
+                <span class="icon">▦</span
+                ><span class="badge open">Manager + lead</span>
+              </div>
+              <h3>Workshop Manager</h3>
+              <p>Make learning hands-on.</p>
+              <div class="card-bottom">
+                <span>1 manager · 1 lead</span><b>View roles →</b>
+              </div>
+            </div>
+            <div
+              class="card lead-card"
+              data-title="Workshop Lead"
+              data-desc="Helps the Workshop Manager prepare sessions, welcome learners, and keep workshops running smoothly."
+            >
+              <div class="card-top">
+                <span class="icon">⌁</span><span class="badge">Lead role</span>
+              </div>
+              <h3>Workshop Lead</h3>
+              <p>Help every session run well.</p>
+              <div class="card-bottom">
+                <span>Reports to Workshop Manager</span><b>View role →</b>
+              </div>
+            </div>
+            <div
+              class="card"
+              data-title="Event Manager"
+              data-desc="Organizes club events and brings members together, supported by an Event Lead."
+            >
+              <div class="card-top">
+                <span class="icon">◈</span
+                ><span class="badge open">Manager + lead</span>
+              </div>
+              <h3>Event Manager</h3>
+              <p>Bring the community together.</p>
+              <div class="card-bottom">
+                <span>1 manager · 1 lead</span><b>View roles →</b>
+              </div>
+            </div>
+            <div
+              class="card lead-card"
+              data-title="Event Lead"
+              data-desc="Works with the Event Manager on event planning, logistics, and making sure members feel welcome."
+            >
+              <div class="card-top">
+                <span class="icon">⌁</span><span class="badge">Lead role</span>
+              </div>
+              <h3>Event Lead</h3>
+              <p>Make great events happen.</p>
+              <div class="card-bottom">
+                <span>Reports to Event Manager</span><b>View role →</b>
+              </div>
+            </div>
+          </div>
+          <div class="note" id="how">
+            <span class="note-icon">ⓘ</span
+            ><span
+              ><b>One member, one ballot.</b> You’ll be able to review your
+              choices before submitting. Candidate profiles, voting dates, and
+              eligibility details will appear here once the election is
+              announced.</span
+            >
+          </div>
+        </section>
+        <footer class="footer" id="about">
+          <span>© 2026 Nexus Coding Club · Built by members, for members</span
+          ><span>Questions? <b>Contact the election team</b></span>
+        </footer>
+      </main>
+    </div>
+    <div class="overlay" id="overlay">
+      <div class="modal">
+        <div class="modal-head">
+          <span class="eyebrow" style="color: #5263dc">POSITION DETAILS</span
+          ><button class="close" aria-label="Close">×</button>
+        </div>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDesc"></p>
+        <button class="primary" id="continue">Got it</button>
+      </div>
+    </div>
+    <div class="toast" id="toast">
+      Voting will open when the election is announced.
+    </div>
+    <script>
+      const overlay = document.querySelector("#overlay"),
+        title = document.querySelector("#modalTitle"),
+        desc = document.querySelector("#modalDesc");
+      document.querySelectorAll(".card").forEach((card) =>
+        card.addEventListener("click", () => {
+          title.textContent = card.dataset.title;
+          desc.textContent = card.dataset.desc;
+          overlay.classList.add("show");
+        }),
+      );
+      document
+        .querySelector(".close")
+        .addEventListener("click", () => overlay.classList.remove("show"));
+      document
+        .querySelector("#continue")
+        .addEventListener("click", () => overlay.classList.remove("show"));
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) overlay.classList.remove("show");
+      });
+      document.querySelector(".member").addEventListener("click", () => {
+        const t = document.querySelector("#toast");
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 2200);
+      });
+    </script>
+  </body>
+</html>
