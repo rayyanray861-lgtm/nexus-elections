@@ -29,6 +29,7 @@ Express serves the election website and connects it to PostgreSQL. Keep the Node
    ```powershell
    psql -U postgres -d nexus_elections -f database/nexus_elections_schema.sql
    psql -U postgres -d nexus_elections -f database/election_app_setup.sql
+   psql -U postgres -d nexus_elections -f database/auth_users.sql
    ```
 
 3. Configure the existing `.env` file in the project root with your PostgreSQL connection values, `SESSION_SECRET`, and `ADMIN_PASSWORD`. Do not replace an existing `.env` with `.env.example`; edit only the values you need to change.
@@ -44,6 +45,6 @@ Express serves the election website and connects it to PostgreSQL. Keep the Node
 
 ## Run with Supabase PostgreSQL
 
-In the Supabase dashboard, open **Connect**, choose **Session pooler**, and put its connection URI in the `DATABASE_URL` setting in the project root `.env`. Keep the URI private. Then run `database/nexus_elections_schema.sql` and `database/election_app_setup.sql`, in that order, in the Supabase SQL Editor. Restart the server with `npm.cmd start` and visit `http://localhost:3000`.
+In the Supabase dashboard, open **Connect**, choose **Session pooler**, and put its connection URI in the `DATABASE_URL` setting in the project root `.env`. Keep the URI private. Then run `database/nexus_elections_schema.sql`, `database/election_app_setup.sql`, and `database/auth_users.sql`, in that order, in the Supabase SQL Editor. Restart the server with `npm.cmd start` and visit `http://localhost:3000`.
 
 The app uses the plural database name `nexus_elections` in the local PostgreSQL setup. For Supabase connection details, see the [Supabase database connection guide](https://supabase.com/docs/guides/database/connecting-to-postgres).

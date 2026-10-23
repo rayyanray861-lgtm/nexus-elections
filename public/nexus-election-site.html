@@ -82,10 +82,20 @@
         border-radius: 8px;
       }
       .nav button:hover,
-      .nav button.active {
+      .nav button.active,
+      .nav a:hover {
         background: var(--pale);
         color: var(--green);
         font-weight: 700;
+      }
+      .nav a {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 8px;
+        padding: 10px 13px;
+        color: #657168;
+        font-size: 12px;
+        text-decoration: none;
       }
       .profile {
         font-size: 11px;
@@ -700,7 +710,9 @@
         <button class="active" data-view="home">Home</button
         ><button data-view="register">Candidate registration</button
         ><button data-view="vote">Voting ballot</button
-        ><button data-view="results">Results</button>
+        ><button data-view="results">Results</button
+        ><a href="announcements.html">Announcements &amp; Feed</a
+        ><a href="/login">Sign in</a>
       </nav>
     </header>
     <main>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f7f5" />
+    <title>Request an account | Nexus Coding Club</title>
+    <style>
+      :root { color-scheme: light; --ink: #171a18; --muted: #66716a; --paper: #f5f7f5; --line: #e3e8e4; --green: #39865b; }
+      * { box-sizing: border-box; }
+      body { min-height: 100vh; margin: 0; display: grid; grid-template-rows: auto 1fr auto; background: var(--paper); color: var(--ink); font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+      a { color: inherit; }
+      .topbar { height: 74px; display: flex; align-items: center; justify-content: space-between; padding: 0 max(5vw, 22px); background: #fff; border-bottom: 1px solid var(--line); }
+      .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 750; }
+      .brand img { width: 82px; height: 44px; object-fit: contain; background: #080808; border-radius: 5px; }
+      .brand small { display: block; margin-top: 3px; color: #849087; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; }
+      .back { color: var(--muted); font-size: 13px; text-decoration: none; }
+      main { display: grid; place-items: center; padding: 48px 20px; }
+      .card { width: min(100%, 440px); padding: clamp(28px, 6vw, 44px); background: #fff; border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 18px 55px rgb(22 43 29 / 7%); }
+      .eyebrow { margin: 0 0 10px; color: var(--green); font-size: 11px; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
+      h1 { margin: 0; font-size: clamp(28px, 6vw, 36px); letter-spacing: -.04em; }
+      .intro { margin: 10px 0 26px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+      .field { margin-top: 17px; }
+      label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 650; }
+      input { width: 100%; min-height: 48px; padding: 0 14px; border: 1px solid #d6ded8; border-radius: 9px; outline: none; background: #fff; color: var(--ink); font: inherit; font-size: 14px; }
+      input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgb(57 134 91 / 14%); }
+      .hint { margin: 7px 0 0; color: var(--muted); font-size: 11px; }
+      button { width: 100%; min-height: 49px; margin-top: 23px; border: 0; border-radius: 9px; background: var(--green); color: #fff; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+      button:hover { background: #2e714b; }
+      button:disabled { opacity: .65; cursor: wait; }
+      .status { min-height: 24px; margin: 13px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+      .status.error { color: #a53636; }
+      .status.success { color: var(--green); }
+      .signin { margin: 18px 0 0; color: var(--muted); font-size: 13px; text-align: center; }
+      .signin a { color: var(--green); font-weight: 650; }
+      footer { padding: 18px 22px; color: #849087; font-size: 11px; text-align: center; }
+      @media (max-width: 480px) { .brand img { width: 58px; height: 36px; } .topbar { height: 66px; } }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Nexus Coding Club home"><img src="/nexus-icon.jpg" alt="" /><span>Nexus Coding Club<small>Community elections</small></span></a>
+      <a class="back" href="/login.html">Sign in</a>
+    </header>
+    <main>
+      <section class="card" aria-labelledby="signup-title">
+        <p class="eyebrow">Member account</p>
+        <h1 id="signup-title">Request access</h1>
+        <p class="intro">Create an account request. You’ll be able to sign in after an administrator approves it.</p>
+        <form id="signupForm">
+          <div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" maxlength="100" required /></div>
+          <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" required /></div>
+          <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="72" required /><p class="hint">Use 12–72 characters.</p></div>
+          <button id="submitButton" type="submit">Send account request</button>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </form>
+        <p class="signin">Already approved? <a href="/login.html">Sign in</a></p>
+      </section>
+    </main>
+    <footer>© 2026 Nexus Coding Club · Elections</footer>
+    <script>
+      const form = document.querySelector("#signupForm");
+      const button = document.querySelector("#submitButton");
+      const status = document.querySelector("#status");
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        button.disabled = true;
+        button.textContent = "Sending request…";
+        status.textContent = "";
+        status.className = "status";
+        try {
+          const response = await fetch("/api/auth/register", {
+            method: "POST", credentials: "same-origin", cache: "no-store",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: form.name.value.trim(), email: form.email.value.trim(), password: form.password.value }),
+          });
+          const type = response.headers.get("content-type") || "";
+          const body = type.includes("application/json") ? await response.json() : { error: (await response.text()).trim() };
+          if (!response.ok) throw new Error(body.error || "Could not send the account request.");
+          status.textContent = `${body.message} You can sign in after approval.`;
+          status.classList.add("success");
+          form.reset();
+        } catch (error) {
+          status.textContent = error.message || "Could not reach the server. Please try again.";
+          status.classList.add("error");
+        } finally {
+          button.disabled = false;
+          button.textContent = "Send account request";
+        }
+      });
+    </script>
+  </body>
+</html>
